@@ -255,3 +255,6 @@ main .section.highlight {
   margin: 0;
   padding: 40px 0;
 }
+.default-content-wrapper{
+  background-color: rgb(225, 122, 122);
+}
