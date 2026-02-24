@@ -131,6 +131,7 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+    enhanceUI();
 }
 
 /**
@@ -142,11 +143,52 @@ function loadDelayed() {
   window.setTimeout(() => import('./delayed.js'), 3000);
   // load anything that can be postponed to the latest here
 }
+/* =========================================
+   CUSTOM UI ENHANCEMENTS
+========================================= */
+
+function enhanceUI() {
+
+  /* 1️⃣ Remove broken images (about:error) */
+  document.querySelectorAll('img').forEach((img) => {
+    if (img.src.includes('about:error')) {
+      img.closest('p')?.remove();
+    }
+  });
+
+  /* 2️⃣ Scroll Reveal Animation */
+  const sections = document.querySelectorAll('.section');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach((section) => {
+    section.classList.add('reveal');
+    observer.observe(section);
+  });
+
+  /* 3️⃣ Navbar shrink on scroll (premium feel) */
+  const header = document.querySelector('.header-wrapper');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  });
+}
 
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
 }
+
 
 loadPage();

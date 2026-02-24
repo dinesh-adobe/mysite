@@ -16,6 +16,7 @@ body {
   background-color: #0f0f0f;
   color: #ffffff;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 /* =========================================
@@ -49,7 +50,7 @@ nav a:hover {
 }
 
 /* =========================================
-   MAIN LAYOUT
+   MAIN STRUCTURE
 ========================================= */
 main {
   margin-top: 100px;
@@ -65,40 +66,35 @@ main {
 }
 
 /* =========================================
-   HERO SECTION
+   TYPOGRAPHY
 ========================================= */
 h1 {
   font-size: 48px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   letter-spacing: 1px;
 }
 
 h2 {
   font-size: 32px;
-  margin-bottom: 30px;
   text-align: center;
+  margin-bottom: 50px;
   color: #ff5c00;
 }
 
-/* Hero Image Styling */
-main img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  display: block;
-  object-fit: cover;
-}
-
 /* =========================================
-   IMAGE OPTIMIZATION (NO LAG VERSION)
+   HERO SECTION (CINEMATIC)
 ========================================= */
-main img {
-  transition: transform 0.3s ease;
+.section:first-of-type picture,
+.section:first-of-type img {
+  width: 100%;
 }
 
-main img:hover {
-  transform: scale(1.03);
+.section:first-of-type img {
+  height: 80vh;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 0;
 }
 
 /* =========================================
@@ -110,21 +106,47 @@ main img:hover {
   gap: 30px;
 }
 
+/* Card container */
 .section:nth-of-type(2) p {
   background: #1a1a1a;
-  border-radius: 15px;
+  border-radius: 14px;
   overflow: hidden;
-  padding: 15px;
+  padding: 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .section:nth-of-type(2) p:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(255, 92, 0, 0.2);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(255, 92, 0, 0.25);
+}
+
+/* Uniform Image Ratio */
+.section:nth-of-type(2) picture,
+.section:nth-of-type(2) img {
+  width: 100%;
+}
+
+.section:nth-of-type(2) img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.section:nth-of-type(2) p:hover img {
+  transform: scale(1.05);
 }
 
 /* =========================================
-   BUTTON STYLE
+   GENERAL IMAGE CONTROL
+========================================= */
+main img {
+  display: block;
+  max-width: 100%;
+}
+
+/* =========================================
+   BUTTONS
 ========================================= */
 .button {
   background: #ff5c00;
@@ -132,10 +154,22 @@ main img:hover {
   padding: 10px 20px;
   border-radius: 30px;
   transition: 0.3s ease;
+  display: inline-block;
 }
 
 .button:hover {
   background: #ff7a26;
+}
+
+/* =========================================
+   BLOCKQUOTE (Hero Overlay Text Styling)
+========================================= */
+blockquote {
+  text-align: center;
+  font-size: 24px;
+  margin-top: 30px;
+  font-weight: 300;
+  color: #dddddd;
 }
 
 /* =========================================
@@ -159,18 +193,220 @@ main img:hover {
 }
 
 /* =========================================
-   RESPONSIVE
+   RESPONSIVE DESIGN
 ========================================= */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   h1 {
-    font-size: 32px;
+    font-size: 36px;
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 26px;
   }
 
   .section {
-    padding: 50px 15px;
+    padding: 60px 15px;
   }
+}
+
+@media (max-width: 600px) {
+  .section:first-of-type img {
+    height: 60vh;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+}
+/* =========================================
+   GLOBAL RESET
+========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f0f0f;
+  color: #fff;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+main {
+  margin-top: 80px;
+}
+
+.section {
+  padding: 80px 20px;
+}
+
+.default-content-wrapper {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =========================================
+   HERO SECTION
+========================================= */
+.section:first-of-type {
+  position: relative;
+  padding: 0;
+}
+
+.section:first-of-type picture,
+.section:first-of-type img {
+  width: 100%;
+  display: block;
+}
+
+.section:first-of-type img {
+  height: 90vh;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Dark overlay */
+.section:first-of-type::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.6),
+    rgba(0,0,0,0.4)
+  );
+}
+
+/* Hero text overlay */
+.section:first-of-type blockquote {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  font-weight: 300;
+  text-align: center;
+  z-index: 2;
+  color: #fff;
+  width: 80%;
+}
+
+/* =========================================
+   HEADINGS
+========================================= */
+h1 {
+  display: none; /* Hide duplicate title */
+}
+
+h2 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 50px;
+  color: #ff5c00;
+}
+
+/* =========================================
+   FEATURED CARS GRID
+========================================= */
+.section:nth-of-type(2) .default-content-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Card container */
+.section:nth-of-type(2) p {
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.section:nth-of-type(2) p:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(255,92,0,0.25);
+}
+
+/* Uniform image ratio */
+.section:nth-of-type(2) img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.section:nth-of-type(2) p:hover img {
+  transform: scale(1.05);
+}
+
+/* =========================================
+   FOOTER SECTION
+========================================= */
+.section:nth-of-type(3) {
+  background: #000;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.section:nth-of-type(3) h2 {
+  margin-bottom: 20px;
+}
+
+.section:nth-of-type(3) pre {
+  background: none;
+  color: #ccc;
+  font-size: 16px;
+}
+
+/* =========================================
+   SMOOTH SCROLL REVEAL
+========================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 768px) {
+  .section:first-of-type img {
+    height: 70vh;
+  }
+
+  .section:first-of-type blockquote {
+    font-size: 26px;
+  }
+}
+/* Scroll Reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Navbar shrink */
+.header-wrapper.scrolled {
+  background: #000;
+  padding: 5px 0;
+  transition: 0.3s ease;
 }
