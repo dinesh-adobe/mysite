@@ -1,138 +1,176 @@
-/* =====================================================
-   SUPERCAR THEME ENHANCEMENT (Non-breaking overrides)
-===================================================== */
-
-/* Upgrade highlight sections (override green safely) */
-main .section.light,
-main .section.highlight {
-  background-color: #111 !important;
-  padding: 80px 0;
+/* =========================================
+   GLOBAL RESET
+========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Upgrade default content wrapper */
-.default-content-wrapper {
-  background: linear-gradient(145deg, #1a1a1a, #0f0f0f) !important;
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #0f0f0f;
   color: #ffffff;
-  padding: 60px 30px;
-  border-radius: 12px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  line-height: 1.6;
 }
 
-.default-content-wrapper:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+/* =========================================
+   HEADER
+========================================= */
+.header-wrapper {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-/* =====================================================
-   CAROUSEL STYLES (New Feature)
-===================================================== */
+.nav-wrapper {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+}
 
-.carousel {
-  position: relative;
-  overflow: hidden;
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+nav a:hover {
+  color: #ff5c00;
+}
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+main {
+  margin-top: 100px;
+}
+
+.section {
+  padding: 80px 20px;
+}
+
+.default-content-wrapper {
   max-width: 1200px;
   margin: auto;
 }
 
-.carousel-track {
-  display: flex;
-  transition: transform 0.6s ease-in-out;
+/* =========================================
+   HERO SECTION
+========================================= */
+h1 {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
 }
 
-.carousel-slide {
-  min-width: 100%;
-  position: relative;
-}
-
-.carousel-slide img {
-  width: 100%;
-  height: 600px;
-  object-fit: cover;
-  border-radius: 12px;
-}
-
-/* Caption */
-.carousel-caption {
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
-  background: rgba(0,0,0,0.6);
-  padding: 20px 30px;
-  border-radius: 8px;
-}
-
-.carousel-caption h2 {
-  margin: 0;
+h2 {
   font-size: 32px;
-  color: #ff3c00;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #ff5c00;
 }
 
-/* Buttons */
-.carousel-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: white;
-  font-size: 28px;
-  padding: 10px 16px;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: background 0.3s ease;
-}
-
-.carousel-btn:hover {
-  background: #ff3c00;
-}
-
-.carousel-btn.prev {
-  left: 20px;
-}
-
-.carousel-btn.next {
-  right: 20px;
-}
-
-/* Responsive carousel */
-@media (max-width: 768px) {
-  .carousel-slide img {
-    height: 400px;
-  }
-
-  .carousel-caption {
-    bottom: 20px;
-    left: 20px;
-    padding: 15px 20px;
-  }
-
-  .carousel-caption h2 {
-    font-size: 22px;
-  }
-}
-/* =====================================
-   IMAGE EFFECTS (Non-breaking addition)
-===================================== */
-
+/* Hero Image Styling */
 main img {
-  transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+}
+
+/* =========================================
+   IMAGE OPTIMIZATION (NO LAG VERSION)
+========================================= */
+main img {
+  transition: transform 0.3s ease;
 }
 
 main img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  filter: brightness(1.08) contrast(1.05);
+  transform: scale(1.03);
 }
 
-/* Smooth fade-in when images load */
-main img {
-  opacity: 0;
-  animation: imageFadeIn 0.8s ease forwards;
+/* =========================================
+   FEATURED CARS GRID
+========================================= */
+.section:nth-of-type(2) .default-content-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
 }
 
-@keyframes imageFadeIn {
-  to {
-    opacity: 1;
+.section:nth-of-type(2) p {
+  background: #1a1a1a;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section:nth-of-type(2) p:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255, 92, 0, 0.2);
+}
+
+/* =========================================
+   BUTTON STYLE
+========================================= */
+.button {
+  background: #ff5c00;
+  color: #fff !important;
+  padding: 10px 20px;
+  border-radius: 30px;
+  transition: 0.3s ease;
+}
+
+.button:hover {
+  background: #ff7a26;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+.footer-wrapper {
+  background: #000;
+  padding: 40px 20px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-wrapper a {
+  color: #ff5c00;
+  text-decoration: none;
+}
+
+.footer-wrapper a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .section {
+    padding: 50px 15px;
   }
 }
