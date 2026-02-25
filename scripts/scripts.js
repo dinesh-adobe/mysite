@@ -13,182 +13,100 @@ import {
   loadCSS,
 } from './aem.js';
 
-/**
- * Builds hero block and prepends to main in a new section.
- * @param {Element} main The container element
- */
-function buildHeroBlock(main) {
-  const h1 = main.querySelector('h1');
-  const picture = main.querySelector('picture');
-  // eslint-disable-next-line no-bitwise
-  if (h1 && picture && (h1.compareDocumentPosition(picture) & Node.DOCUMENT_POSITION_PRECEDING)) {
-    // Check if h1 or picture is already inside a hero block
-    if (h1.closest('.hero') || picture.closest('.hero')) {
-      return; // Don't create a duplicate hero block
+/* =========================================
+   CLEANUP + UI OPTIMIZATION
+========================================= */
+function optimizeUI() {
+
+  /* Remove broken images */
+  document.querySelectorAll("img").forEach(img => {
+    if (img.src.includes("about:error")) {
+      img.closest("p")?.remove();
     }
-    const section = document.createElement('div');
-    section.append(buildBlock('hero', { elems: [picture, h1] }));
-    main.prepend(section);
-  }
-}
+  });
 
-/**
- * load fonts.css and set a session storage flag
- */
-async function loadFonts() {
-  await loadCSS(`${window.hlx.codeBasePath}/styles/fonts.css`);
-  try {
-    if (!window.location.hostname.includes('localhost')) sessionStorage.setItem('fonts-loaded', 'true');
-  } catch (e) {
-    // do nothing
-  }
-}
-
-/**
- * Builds all synthetic blocks in a container element.
- * @param {Element} main The container element
- */
-function buildAutoBlocks(main) {
-  try {
-    // auto load `*/fragments/*` references
-    const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
-    if (fragments.length > 0) {
-      // eslint-disable-next-line import/no-cycle
-      import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
-        fragments.forEach(async (fragment) => {
-          try {
-            const { pathname } = new URL(fragment.href);
-            const frag = await loadFragment(pathname);
-            fragment.parentElement.replaceWith(...frag.children);
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error('Fragment loading failed', error);
-          }
-        });
-      });
+  /* Remove empty paragraphs */
+  document.querySelectorAll("p").forEach(p => {
+    if (!p.textContent.trim() && !p.querySelector("img")) {
+      p.remove();
     }
+  });
 
-    buildHeroBlock(main);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Auto Blocking failed', error);
-  }
+  /* Scroll reveal */
+  const sections = document.querySelectorAll(".section");
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("active");
+      }
+    });
+  }, { threshold: 0.15 });
+
+  sections.forEach(section => {
+    section.classList.add("reveal");
+    observer.observe(section);
+  });
+
+  /* Navbar scroll optimization */
+  const header = document.querySelector(".header-wrapper");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 60) {
+      header?.classList.add("scrolled");
+    } else {
+      header?.classList.remove("scrolled");
+    }
+  }, { passive: true });
 }
 
-/**
- * Decorates the main element.
- * @param {Element} main The main element
- */
-// eslint-disable-next-line import/prefer-default-export
+/* =========================================
+   MAIN DECORATION
+========================================= */
 export function decorateMain(main) {
-  // hopefully forward compatible button decoration
   decorateButtons(main);
   decorateIcons(main);
-  buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
 }
 
-/**
- * Loads everything needed to get to LCP.
- * @param {Element} doc The container element
- */
+/* =========================================
+   LOAD EAGER
+========================================= */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  document.documentElement.lang = "en";
   decorateTemplateAndTheme();
-  const main = doc.querySelector('main');
+
+  const main = doc.querySelector("main");
+
   if (main) {
     decorateMain(main);
-    document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
-  }
-
-  try {
-    /* if desktop (proxy for fast connection) or fonts already loaded, load fonts.css */
-    if (window.innerWidth >= 900 || sessionStorage.getItem('fonts-loaded')) {
-      loadFonts();
-    }
-  } catch (e) {
-    // do nothing
+    document.body.classList.add("appear");
+    await loadSection(main.querySelector(".section"), waitForFirstImage);
   }
 }
 
-/**
- * Loads everything that doesn't need to be delayed.
- * @param {Element} doc The container element
- */
+/* =========================================
+   LOAD LAZY
+========================================= */
 async function loadLazy(doc) {
-  loadHeader(doc.querySelector('header'));
+  loadHeader(doc.querySelector("header"));
 
-  const main = doc.querySelector('main');
+  const main = doc.querySelector("main");
   await loadSections(main);
 
-  const { hash } = window.location;
-  const element = hash ? doc.getElementById(hash.substring(1)) : false;
-  if (hash && element) element.scrollIntoView();
-
-  loadFooter(doc.querySelector('footer'));
-
+  loadFooter(doc.querySelector("footer"));
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
-  loadFonts();
-    enhanceUI();
+
+  optimizeUI();
 }
 
-/**
- * Loads everything that happens a lot later,
- * without impacting the user experience.
- */
-function loadDelayed() {
-  // eslint-disable-next-line import/no-cycle
-  window.setTimeout(() => import('./delayed.js'), 3000);
-  // load anything that can be postponed to the latest here
-}
 /* =========================================
-   CUSTOM UI ENHANCEMENTS
+   INIT
 ========================================= */
-
-function enhanceUI() {
-
-  /* 1️⃣ Remove broken images (about:error) */
-  document.querySelectorAll('img').forEach((img) => {
-    if (img.src.includes('about:error')) {
-      img.closest('p')?.remove();
-    }
-  });
-
-  /* 2️⃣ Scroll Reveal Animation */
-  const sections = document.querySelectorAll('.section');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-      }
-    });
-  }, { threshold: 0.2 });
-
-  sections.forEach((section) => {
-    section.classList.add('reveal');
-    observer.observe(section);
-  });
-
-  /* 3️⃣ Navbar shrink on scroll (premium feel) */
-  const header = document.querySelector('.header-wrapper');
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header?.classList.add('scrolled');
-    } else {
-      header?.classList.remove('scrolled');
-    }
-  });
-}
-
 async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
-  loadDelayed();
 }
-
 
 loadPage();
