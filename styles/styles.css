@@ -185,3 +185,142 @@ main {
     padding: 60px 15px;
   }
 }
+/* =========================================
+   PREMIUM AUTOMOTIVE HEADER
+========================================= */
+
+.header-wrapper {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(14px);
+  background: rgba(0, 0, 0, 0.65);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.3s ease, padding 0.3s ease;
+}
+
+.header-wrapper.scrolled {
+  background: #000;
+}
+
+/* NAV WRAPPER */
+.nav-wrapper {
+  max-width: 1300px;
+  margin: auto;
+  padding: 18px 24px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* BRAND */
+.nav-brand a {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #ffffff;
+}
+
+/* NAV LINKS */
+.nav-sections ul {
+  display: flex;
+  list-style: none;
+  gap: 40px;
+}
+
+.nav-sections ul li {
+  position: relative;
+}
+
+.nav-sections ul li a,
+.nav-sections ul li p {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+/* Animated underline */
+.nav-sections ul li::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 0%;
+  height: 2px;
+  background: #ff5c00;
+  transition: width 0.3s ease;
+}
+
+.nav-sections ul li:hover::after {
+  width: 100%;
+}
+
+.nav-sections ul li:hover a {
+  color: #ff5c00;
+}
+
+/* NAV BUTTON */
+.nav-tools .button {
+  background: #ff5c00;
+  color: #fff !important;
+  padding: 8px 20px;
+  border-radius: 25px;
+  transition: 0.3s ease;
+}
+
+.nav-tools .button:hover {
+  background: #ff7a26;
+}
+
+/* =========================================
+   MOBILE NAVIGATION
+========================================= */
+
+.nav-hamburger {
+  display: none;
+}
+
+@media (max-width: 900px) {
+
+  .nav-sections {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: #000;
+    transform: translateY(-120%);
+    transition: transform 0.3s ease;
+    padding: 30px 0;
+  }
+
+  .nav-sections.active {
+    transform: translateY(0);
+  }
+
+  .nav-sections ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  .nav-hamburger {
+    display: block;
+  }
+
+  .nav-hamburger button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-tools {
+    display: none;
+  }
+}

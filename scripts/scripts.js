@@ -109,4 +109,30 @@ async function loadPage() {
   await loadLazy(document);
 }
 
+/* =========================================
+   HEADER INTERACTIONS
+========================================= */
+
+function initHeaderUI() {
+
+  const header = document.querySelector(".header-wrapper");
+  const hamburgerBtn = document.querySelector(".nav-hamburger button");
+  const navSections = document.querySelector(".nav-sections");
+
+  /* Scroll effect */
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 60) {
+      header?.classList.add("scrolled");
+    } else {
+      header?.classList.remove("scrolled");
+    }
+  }, { passive: true });
+
+  /* Mobile toggle */
+  if (hamburgerBtn && navSections) {
+    hamburgerBtn.addEventListener("click", () => {
+      navSections.classList.toggle("active");
+    });
+  }
+}
 loadPage();
