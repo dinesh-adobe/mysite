@@ -1,27 +1,73 @@
+/* ===== Cards Grid ===== */
 .cards > ul {
   list-style: none;
   margin: 0;
   padding: 0;
+
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
 }
 
+/* ===== Individual Card ===== */
 .cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  background-color: var(--background-color, #ffffff);
+  border-radius: 16px;
+  overflow: hidden;
+
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  transition: 
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
 }
 
-.cards .cards-card-body {
-  margin: 16px;
+/* Hover Interaction */
+.cards > ul > li:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
+/* ===== Card Image Wrapper ===== */
 .cards .cards-card-image {
   line-height: 0;
+  overflow: hidden;
+  position: relative;
 }
 
+/* Image Styling */
 .cards > ul > li img {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+
+  transition: transform 0.5s ease;
+}
+
+/* Subtle Zoom on Hover */
+.cards > ul > li:hover img {
+  transform: scale(1.05);
+}
+
+/* ===== Card Body ===== */
+.cards .cards-card-body {
+  padding: 20px;
+}
+
+/* Optional Title Styling */
+.cards .cards-card-body h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Optional Description Styling */
+.cards .cards-card-body p {
+  margin: 0;
+  color: #555;
+  line-height: 1.5;
+  font-size: 0.95rem;
 }
