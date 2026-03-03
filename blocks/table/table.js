@@ -53,9 +53,7 @@ export default async function decorate(block) {
 
     block.innerHTML = '';
     block.appendChild(table);
-
   } catch (error) {
-    console.error('Table fetch failed:', error);
     block.innerHTML = '<p>Failed to load data</p>';
   }
 }

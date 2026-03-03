@@ -10,14 +10,14 @@
   border-collapse: collapse;
   font-family: system-ui, sans-serif;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 8%);
   border-radius: 10px;
   overflow: hidden;
 }
 
 .dynamic-table thead {
   background: #1f2937;
-  color: #ffffff;
+  color: #fff;
 }
 
 .dynamic-table th,
@@ -51,7 +51,7 @@
   color: #374151;
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   .dynamic-table th,
   .dynamic-table td {
     padding: 10px;
