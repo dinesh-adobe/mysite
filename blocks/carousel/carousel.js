@@ -1,73 +1,101 @@
 export default function decorate(block) {
   const rows = [...block.children];
-
-  rows.forEach((row, r) => {
-    // FIRST ROW → NEXT BUTTON
-    if (r === 0) {
-      const nextbtn = document.createElement('button');
-      nextbtn.classList.add('btn', 'btn-next');
-      nextbtn.textContent = row.textContent.trim();
-      row.replaceWith(nextbtn);
-
-    // LAST ROW → PREV BUTTON
-    } else if (r === rows.length - 1) {
-      const prevbtn = document.createElement('button');
-      prevbtn.classList.add('btn', 'btn-prev');
-      prevbtn.textContent = row.textContent.trim();
-      row.replaceWith(prevbtn);
-
-    // MIDDLE ROWS → SLIDES
-    } else {
-      row.classList.add('slide');
-
-      [...row.children].forEach((col, c) => {
-        if (c === 1) {
-          col.classList.add('slide-text');
-        }
-      });
-    }
+  let current = 0;
+ 
+  const track = document.createElement('div');
+  track.className = 'carousel-track';
+ 
+  rows.forEach((row) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+ 
+    const image = row.children[0];
+    const title = row.children[1];
+    const description = row.children[2];
+    const link = row.children[3];
+ 
+    const content = document.createElement('div');
+    content.className = 'carousel-content';
+ 
+    content.append(title);
+    content.append(description);
+    content.append(link);
+ 
+    slide.append(image);
+    slide.append(content);
+ 
+    track.append(slide);
   });
-
-  const slides = document.querySelectorAll('.slide');
-
-  // Position slides horizontally
-  slides.forEach((slide, index) => {
-    slide.style.transform = `translateX(${index * 100}%)`;
+ 
+  block.textContent = '';
+  block.append(track);
+ 
+  const slides = [...track.children];
+ 
+  /* arrows */
+ 
+  const prev = document.createElement('button');
+  prev.className = 'carousel-prev';
+  prev.innerHTML = '←';
+ 
+  const next = document.createElement('button');
+  next.className = 'carousel-next';
+  next.innerHTML = '→';
+ 
+  block.append(prev);
+  block.append(next);
+ 
+  /* dots */
+ 
+  const dotsContainer = document.createElement('div');
+  dotsContainer.className = 'carousel-dots';
+ 
+  block.append(dotsContainer);
+ 
+  /* update function must be defined before usage */
+ 
+  function update() {
+    track.style.transform = `translateX(-${current * 100}%)`;
+ 
+    const dots = dotsContainer.querySelectorAll('.dot');
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === current);
+    });
+  }
+ 
+  /* create dots */
+ 
+  slides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+ 
+    if (i === 0) dot.classList.add('active');
+ 
+    dot.addEventListener('click', () => {
+      current = i;
+      update();
+    });
+ 
+    dotsContainer.append(dot);
   });
-
-  const nextSlide = document.querySelector('.btn-next');
-  const prevSlide = document.querySelector('.btn-prev');
-
-  let curSlide = 0;
-  const maxSlide = slides.length - 1;
-
-  function goToSlide(slideIndex) {
-    slides.forEach((slide, index) => {
-      slide.style.transform = `translateX(${100 * (index - slideIndex)}%)`;
-    });
-  }
-
-  // NEXT BUTTON
-  if (nextSlide) {
-    nextSlide.addEventListener('click', () => {
-      if (curSlide === maxSlide) {
-        curSlide = 0;
-      } else {
-        curSlide += 1;
-      }
-      goToSlide(curSlide);
-    });
-  }
-
-  // PREV BUTTON
-  if (prevSlide) {
-    prevSlide.addEventListener('click', () => {
-      if (curSlide === 0) {
-        curSlide = maxSlide;
-      } else {
-        curSlide -= 1;
-      }
-      goToSlide(curSlide);
-    });
-  }
+ 
+  /* arrows */
+ 
+  prev.addEventListener('click', () => {
+    current = (current - 1 + slides.length) % slides.length;
+    update();
+  });
+ 
+  next.addEventListener('click', () => {
+    current = (current + 1) % slides.length;
+    update();
+  });
+ 
+  /* auto slide */
+ 
+  setInterval(() => {
+    current = (current + 1) % slides.length;
+    update();
+  }, 10000);
 }
+ 
